@@ -3,25 +3,72 @@
   <head>
     <meta charset="utf-8">
     <title>To‑Do List</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      h1 {
+        color: #333;
+      }
+      form {
+        margin-bottom: 20px;
+      }
+      input[type="text"] {
+        padding: 5px;
+        margin-right: 10px;
+      }
+      button {
+        padding: 5px 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      ul {
+        list-style-type: none;
+        padding-left: 0;
+      }
+      li {
+        padding: 8px;
+        background-color: #f4f4f4;
+        margin: 5px 0;
+        border-radius: 4px;
+      }
+      input[type="checkbox"] {
+        margin-right: 10px;
+      }
+    </style>
   </head>
   <body>
     <h1>To‑Do List</h1>
 
+    <!-- タスク追加フォーム -->
     <form action="{{ url_for('add') }}" method="post">
-      <input name="title" placeholder="New task">
+      <input name="title" placeholder="New task" required>
       <button type="submit">Add</button>
     </form>
 
+    <!-- タスク一覧 -->
     <ul>
-      {% for task in tasks %}
-        <li>
-          {{ task.title }}
-          <form action="{{ url_for('delete', task_id=task.id) }}" method="post" style="display:inline;">
-            <button type="submit">🗑</button>
-          </form>
-        </li>
-      {% endfor %}
+        {% for task in tasks %}
+          <li>
+              <form action="{{ url_for('toggle', task_id=task.id) }}" method="post">
+                  <input type="checkbox" 
+                         name="done" 
+                         {% if task.done %} checked {% endif %} 
+                         onclick="this.form.submit()">
+                  {{ task.title }}
+              </form>
+              <!-- タスク削除ボタン -->
+              <form action="{{ url_for('delete', task_id=task.id) }}" method="post" style="display:inline;">
+                  <button type="submit">Delete</button>
+              </form>
+          </li>
+        {% endfor %}
     </ul>
   </body>
 </html>
-
