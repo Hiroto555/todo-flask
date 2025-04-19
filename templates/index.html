@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title>To‑Do List</title>
+  </head>
+  <body>
+    <h1>To‑Do List</h1>
+
+    <form action="{{ url_for('add') }}" method="post">
+      <input name="title" placeholder="New task">
+      <button type="submit">Add</button>
+    </form>
+
+    <ul>
+      {% for task in tasks %}
+        <li>
+          {{ task.title }}
+          <form action="{{ url_for('delete', task_id=task.id) }}" method="post" style="display:inline;">
+            <button type="submit">🗑</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
+
